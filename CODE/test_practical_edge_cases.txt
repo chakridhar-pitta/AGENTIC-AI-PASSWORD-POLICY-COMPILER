@@ -1,0 +1,18 @@
+# ==============================================================
+# PRACTICAL TEST CASE 5: EDGE CASES & STRESS TESTING
+# ==============================================================
+# Practical boundary testing for compiler robustness:
+# - Tight boundary where minLength equals maxLength (exact length policy)
+# - Exact character distribution sum matching total length
+minLength 16
+maxLength 16
+require uppercase 4
+require lowercase 4
+require digit 4
+require special 4
+forbid spaces
+forbid sequence 2
+forbid repeated 2
+blacklist "root"
+blacklist "superuser"
+strength minimum strong

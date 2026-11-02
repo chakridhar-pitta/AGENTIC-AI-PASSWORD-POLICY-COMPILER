@@ -1,0 +1,56 @@
+{
+  "manifest_version": "3.2.0",
+  "dataset_title": "Curated Weak Password Corpus (OWASP ASVS V6.2.4 Compliant)",
+  "target_standard": "NIST SP 800-63B-4 Section 3.1.1.2 & OWASP ASVS 5.0.0 V6.2.4/V6.2.8/V6.2.12",
+  "total_unique_entries": 3000,
+  "deduplication_mode": "Strict ASCII Canonical Lowercase Trimmed",
+  "cross_category_duplicates_removed": 0,
+  "last_updated": "2026-11-02",
+  "categories": {
+    "common_passwords": {
+      "count": 1000,
+      "file": "common_passwords.txt",
+      "description": "Top authentic real-world passwords from public corpuses and breach summaries"
+    },
+    "numeric_patterns": {
+      "count": 400,
+      "file": "numeric_patterns.txt",
+      "description": "Sequential digits, repeated runs, PINs, and date patterns"
+    },
+    "keyboard_patterns": {
+      "count": 300,
+      "file": "keyboard_patterns.txt",
+      "description": "Spatial keyboard walks across QWERTY, keypad, and diagonal layouts"
+    },
+    "dictionary_patterns": {
+      "count": 400,
+      "file": "dictionary_patterns.txt",
+      "description": "Common dictionary nouns, adjectives, pop culture terms"
+    },
+    "admin_patterns": {
+      "count": 300,
+      "file": "admin_patterns.txt",
+      "description": "Default administrative, networking, service, and role accounts"
+    },
+    "word_number_patterns": {
+      "count": 300,
+      "file": "word_number_patterns.txt",
+      "description": "Dictionary words combined with predictable numeric suffixes"
+    },
+    "other_weak_patterns": {
+      "count": 300,
+      "file": "other_weak_patterns.txt",
+      "description": "Repetitive phrases, idioms, and common security-avoidance patterns"
+    }
+  },
+  "provenance": {
+    "sources": [
+      "SecLists Top Credentials",
+      "OWASP Common Weak Passwords",
+      "NIST SP 800-63B Appendix",
+      "Public Domain Breached Subsets"
+    ],
+    "license": "Public Domain / CC0 Universal / Research Benchmark",
+    "pii_leak_containment": "Zero PII, zero email:password pairs, zero salt/hashes, zero live user data"
+  }
+}

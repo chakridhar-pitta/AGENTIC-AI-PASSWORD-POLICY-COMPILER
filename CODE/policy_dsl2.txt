@@ -1,0 +1,19 @@
+# ==========================================
+# Policy DSL 2.0 Demonstration Policy
+# ==========================================
+minLength 12
+maxLength 32
+
+require uppercase 1
+require lowercase 1
+require digit 2
+require special 1
+
+forbid spaces
+forbid sequence 3
+forbid repeated 3
+
+blacklist "password"
+blacklist "admin"
+
+strength minimum strong

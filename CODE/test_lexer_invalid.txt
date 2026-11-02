@@ -1,0 +1,4 @@
+# Policy with invalid token for testing Agent 1 Lexer Gate
+minLength 12
+require uppercase 1
+@invalid

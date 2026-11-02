@@ -1,0 +1,3 @@
+minLength 12
+require uppercase
+require digit 2

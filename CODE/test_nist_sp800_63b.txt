@@ -1,0 +1,18 @@
+# ==============================================================
+# PRACTICAL TEST CASE 1: NIST SP 800-63B DIGITAL IDENTITY STANDARD
+# ==============================================================
+# Modern federal cybersecurity recommendation (NIST):
+# - Favors length over complex composition rules
+# - Restricts common sequential, repeated, and breached terms
+# - Minimum 12 characters, up to 64
+minLength 12
+maxLength 64
+forbid spaces
+forbid sequence 4
+forbid repeated 4
+blacklist "password"
+blacklist "admin"
+blacklist "welcome"
+blacklist "qwerty"
+blacklist "123456"
+strength minimum medium

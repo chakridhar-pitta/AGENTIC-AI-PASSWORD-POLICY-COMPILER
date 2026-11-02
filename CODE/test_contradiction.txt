@@ -1,0 +1,4 @@
+# Contradictory Policy for testing Agent 3 Semantic Gate
+minLength 20
+maxLength 10
+require uppercase 1

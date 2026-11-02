@@ -1,0 +1,20 @@
+# ==============================================================
+# PRACTICAL TEST CASE 2: PCI-DSS v4.0 PAYMENT CARD INDUSTRY
+# ==============================================================
+# Strict compliance standard for banks, merchants, and cardholders:
+# - Minimum length of 12 characters (PCI-DSS requirement 8.3.6)
+# - Enforces upper, lower, numeric, and special character presence
+# - Forbids embedded whitespace and cardholder/banking keywords
+minLength 12
+maxLength 32
+require uppercase 1
+require lowercase 1
+require digit 1
+require special 1
+forbid spaces
+blacklist "bank"
+blacklist "payment"
+blacklist "cardholder"
+blacklist "visa"
+blacklist "mastercard"
+strength minimum strong

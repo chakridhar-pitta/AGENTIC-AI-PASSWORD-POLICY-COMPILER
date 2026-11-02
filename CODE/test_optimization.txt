@@ -1,0 +1,6 @@
+# Redundant policy for testing Agent 4 IR optimization
+minLength 12
+require uppercase 1
+require uppercase 1
+require digit 1
+require digit 1

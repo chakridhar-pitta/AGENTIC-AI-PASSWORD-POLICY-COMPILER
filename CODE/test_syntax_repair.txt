@@ -1,0 +1,5 @@
+# Demonstrating Agent 2: Syntax Agent AST Self-Repair
+minLength 12
+require uppercase
+require digit 2
+require special 1

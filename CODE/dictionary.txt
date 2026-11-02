@@ -1,0 +1,23 @@
+# Configurable Custom Password Dictionary
+# Passwords or forbidden words placed in this file are automatically loaded by the Security Engine
+password
+123456
+admin
+qwerty
+welcome
+letmein
+iloveyou
+monkey
+dragon
+football
+superman
+pass1234
+master
+sunshine
+princess
+secret
+access
+shadow
+testing
+company2026
+autumn2026
