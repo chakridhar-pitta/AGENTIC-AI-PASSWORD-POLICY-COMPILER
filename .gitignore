@@ -1,0 +1,24 @@
+# Build artifacts and binaries
+*.exe
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+
+# Compiler-generated policy validators and manifests
+generated_validator.cpp
+**/generated_validator.cpp
+generated_bloom_manifest.json
+**/generated_bloom_manifest.json
+
+# Build and IDE directories
+build/
+bin/
+obj/
+.vscode/
+.idea/
+*.swp
+*.patch
