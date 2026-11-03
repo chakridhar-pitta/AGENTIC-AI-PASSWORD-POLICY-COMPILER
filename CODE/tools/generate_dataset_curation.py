@@ -3,7 +3,7 @@ import json
 import re
 
 # Output paths - resolve relative to script location (CODE/tools -> CODE)
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else os.getcwd()
 CODE_DIR = os.path.dirname(SCRIPT_DIR)
 DATASETS_DIR = os.path.join(CODE_DIR, "datasets")
 os.makedirs(DATASETS_DIR, exist_ok=True)
@@ -12,16 +12,19 @@ def canonicalize(w):
     return re.sub(r'\s+', '', w.strip().lower())
 
 global_seen = set()
+seen = set()
 
 def select_entries(candidates, target_count, category_name):
     selected = []
     for c in candidates:
         cw = canonicalize(c)
-        if cw and (cw not in global_seen):
-            global_seen.add(cw)
-            selected.append(cw)
-            if len(selected) == target_count:
-                break
+        if cw:
+            seen.add(cw)
+            if cw not in global_seen:
+                global_seen.add(cw)
+                selected.append(cw)
+                if len(selected) == target_count:
+                    break
     if len(selected) < target_count:
         print(f"WARNING: '{category_name}' wanted {target_count}, got {len(selected)}")
     return selected
@@ -674,7 +677,7 @@ manifest = {
     "target_standard": "NIST SP 800-63B-4 Section 3.1.1.2 & OWASP ASVS 5.0.0 V6.2.4/V6.2.8/V6.2.12",
     "total_unique_entries": 3000,
     "deduplication_mode": "Strict ASCII Canonical Lowercase Trimmed",
-    "cross_category_duplicates_removed": len(seen) - len(global_seen) if 'seen' in locals() else 0,
+    "cross_category_duplicates_removed": len(seen) - len(global_seen),
     "last_updated": "2026-11-02",
     "categories": {
         "common_passwords": {"count": 1000, "file": "common_passwords.txt", "description": "Top authentic real-world passwords from public corpuses and breach summaries"},

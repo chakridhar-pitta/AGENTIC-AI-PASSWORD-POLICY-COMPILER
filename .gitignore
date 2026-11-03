@@ -22,3 +22,7 @@ obj/
 .idea/
 *.swp
 *.patch
+
+# Python cache
+__pycache__/
+*.py[cod]
