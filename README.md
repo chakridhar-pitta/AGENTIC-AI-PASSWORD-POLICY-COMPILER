@@ -1,91 +1,143 @@
-# Agentic AI Password Policy Compiler (Enterprise v3.0)
+# Agentic AI Password Policy Compiler
 
 <p align="center">
   <img src="docs/images/nitw_crest_official.png" alt="NIT Warangal Crest" width="160" />
 </p>
 
-A university compiler-design project featuring an 8-stage Agentic AI compiler pipeline, attack simulation suite, and intelligent password policy enforcement engine.
-
-## Core Pillars
-- **Agentic AI**: 7 specialized autonomous compiler agents + orchestrator + dual security gates + O-A-D-A-V telemetry audit trails.
-- **Attack Simulation**: Automated attack detection suite testing 28 real-world vectors (prompt injection, policy bypass, downgrade attacks, DSL/C++ code injection, DoS) with quantitative confusion matrix evaluation.
-- **Intelligent AI**: Neuro-symbolic multi-factor policy verification, Leetspeak variant detection, and static RODATA Bloom filtering.
+A university compiler-design project implementing a domain-specific language (DSL) for password policies. The compiler incorporates an autonomous multi-agent pipeline, an automated attack simulation benchmark, and an intelligent evaluator for policy satisfiability and password screening.
 
 ---
 
-## Architectural Design & Pipeline
+## Project Goals
 
-The system architecture and multi-agent interaction flow are documented in `docs/images/`:
-- **Overall System Architecture**: [`docs/images/Architecture Diagram.png`](docs/images/Architecture%20Diagram.png)
-- **Agentic Pipeline**: [`docs/images/Architectural Pipeline.png`](docs/images/Architectural%20Pipeline.png)
-- **Module Interaction Flow**: [`docs/images/Module Interaction Flow.png`](docs/images/Module%20Interaction%20Flow.png)
-- **Evolutionary Architecture Comparison**: [`docs/images/Existing_and_Proposed_Architecture.png`](docs/images/Existing_and_Proposed_Architecture.png)
+1. **Agentic AI**:
+   - The compilation process is structured into specialized autonomous compiler agents coordinated by an orchestrator.
+   - Each agent operates across a 5-phase loop (**O-A-D-A-V**: Observe, Analyze, Decide, Act, Verify), generating structured telemetry trails for compilation decisions.
+   - Dual security gates enforce policy satisfiability before code generation and verify generated C++ source code before emission.
+2. **Attack Simulation**:
+   - Automated benchmark suite testing 28 practical security scenarios against the policy compiler.
+   - Covers threat categories including prompt injection/policy bypass attempts, security downgrade requests, code injection via DSL, and input buffer limits.
+   - Computes quantitative evaluation metrics (Confusion Matrix, Precision, Recall, F1-Score, and False Positive Rate).
+3. **Intelligent AI**:
+   - **Neuro-Symbolic Evaluator**: Combines deterministic constraint evaluation with statistical Shannon entropy calculations and multi-factor strength scoring.
+   - **Leetspeak Analysis**: Normalizes ASCII character substitution patterns (e.g., `@` $\rightarrow$ `a`, `$` $\rightarrow$ `s`, `0` $\rightarrow$ `o`) against blocklist datasets.
+   - **Static Bloom Filter**: Uses double hashing (FNV-1a and MurmurMix) to screen against a curated 3,000-key canonical weak password dataset with exact binary search verification.
 
 ---
 
-## Building the Compiler
+## Compiler Pipeline
 
-Build the compiler and test suite using `g++` (C++14 or higher):
+```mermaid
+flowchart LR
+    In["Policy DSL Input"] --> Guard["Input Guard\n(Agent 0)"]
+    Guard --> Lexer["Lexer\n(Agent 1)"]
+    Lexer --> Parser["Parser & AST\n(Agent 2)"]
+    Parser --> Sem["Semantic Analysis\n(Agent 3 / Gate #1)"]
+    Sem --> IR["Policy IR\n(Agent 4)"]
+    IR --> DFA["Automata Engine\n(NFA -> Min DFA)"]
+    DFA --> Codegen["Codegen & Bloom\n(Agent 5 / Gate #2)"]
+    Codegen --> Val["Validation Oracle\n(Agent 6)"]
+    Val --> Audit["Security Audit\n(Agent 7)"]
+    Audit --> Out["Compiled Validator\n(generated_validator.cpp)"]
+```
 
-### Main Compiler (`policy_compiler.exe`)
+1. **Input Guard (Agent 0)**: Sanitizes input text, checks bounds (64 KB limit), and detects prompt injection attempts.
+2. **Lexer (Agent 1)**: Tokenizes policy DSL statements and verifies lexical security.
+3. **Parser (Agent 2)**: Builds a strongly-typed AST representing length, character class, pattern, dictionary, and entropy requirements.
+4. **Semantic Analysis (Agent 3 - Security Gate #1)**: Validates constraint satisfiability and identifies impossible bounds or logical contradictions.
+5. **Policy IR & DFA Optimization (Agent 4)**: Canonicalizes AST nodes and translates pattern constraints into an NFA, subsets to a DFA, and minimizes states via Hopcroft's algorithm.
+6. **Hardened Codegen (Agent 5 - Security Gate #2)**: Synthesizes a standalone C++ validator containing the DFA transition matrix and static Bloom filter tables.
+7. **Validation Oracle (Agent 6)**: Runs a test suite against the compiled policy to verify constraint conformance.
+8. **Security Audit (Agent 7)**: Performs threat profiling, leetspeak variant detection, and entropy scoring on candidate passwords.
+
+---
+
+## Project Structure
+
+```text
+├── src/                  # C++ compiler implementation and headers
+│   ├── main.cpp          # CLI entry point and interactive evaluation loop
+│   ├── agentic_orchestrator.* # Agent coordinator and telemetry manager
+│   ├── agent_*.cpp/.h    # Specialized compiler stage agents
+│   ├── automata.*        # Regular expression to NFA/DFA/minimized DFA engine
+│   ├── bloom_filter.*    # Static Bloom filter builder and double-hash generator
+│   ├── leetspeak.*       # ASCII substitution normalizer
+│   ├── neurosymbolic.*   # Multi-factor evaluator and entropy calculator
+│   └── ...               # AST, IR, lexer, parser, semantic analyzer, codegen
+├── tests/                # Policy DSL test cases and standalone test harness
+│   ├── policy_dsl2.txt   # Multi-constraint sample policy
+│   ├── test_*.txt        # Threat vectors, edge cases, and industry baselines
+│   └── test_security_cases.cpp # Bloom filter and leetspeak verification tests
+├── data/                 # Wordlists and weak password patterns
+│   ├── datasets/         # 7 category pattern files (3,000 unique keys)
+│   ├── breach_corpus.txt # Consolidated deduplicated weak passwords
+│   └── dictionary.txt    # Configurable base dictionary
+├── tools/                # Dataset generation and maintenance scripts
+│   └── generate_dataset_curation.py # Canonical dataset curator and deduplicator
+├── web/                  # Offline visualizer and testing tools
+│   ├── Enhanced_Compiler.html      # Interactive visual compiler UI
+│   ├── test_suite_standalone.html  # Standalone client-side test suite
+│   └── dataset_bundle.js           # Embedded dataset bundle for web testing
+└── docs/                 # Documentation assets and architectural diagrams
+    └── images/           # Pipeline flowcharts and architecture diagrams
+```
+
+---
+
+## How to Build
+
+The compiler requires a standard C++14 (or newer) toolchain (e.g., `g++` / MinGW).
+
+### 1. Build Main Compiler (`policy_compiler.exe`)
 ```bash
 g++ -std=c++14 -O2 -I src src/*.cpp -o policy_compiler.exe
 ```
 
-### Test Suite (`test_security_cases.exe`)
+### 2. Build Security Test Suite (`test_security_cases.exe`)
 ```bash
 g++ -std=c++14 -O2 -I src tests/test_security_cases.cpp src/bloom_filter.cpp src/leetspeak.cpp -o test_security_cases.exe
 ```
 
 ---
 
-## Usage
+## How to Run
 
-### 1. Compile a Policy File & Evaluate Password
+### 1. Compile a Policy File
+Compiles the specified DSL file and writes the standalone C++ validator (`generated_validator.cpp`):
+```bash
+./policy_compiler.exe tests/policy_dsl2.txt
+```
+
+### 2. Non-Interactive Password Evaluation
+Evaluates a candidate password directly from the command line against the compiled policy:
 ```bash
 ./policy_compiler.exe tests/policy_dsl2.txt --password "Test@1234"
 ```
 
-### 2. Run Attack Simulation Suite
+### 3. Automated Attack Simulation Suite
+Runs the built-in attack detector and resilience benchmark across 28 test cases:
 ```bash
 ./policy_compiler.exe --simulate-attacks
 ```
 
-### 3. Run Security & Smart Finder Test Suite
+### 4. Display Agent Telemetry Trail
+Outputs the full O-A-D-A-V telemetry trail showing each agent's observations and actions:
+```bash
+./policy_compiler.exe tests/policy_dsl2.txt --telemetry
+```
+
+### 5. Run Security & Smart Finder Test Suite
+Executes the integration test suite for the Bloom filter and leetspeak analyzer:
 ```bash
 ./test_security_cases.exe
 ```
 
 ---
 
-## Project Structure
-- `src/` : 7 Agentic AI compiler stages, dual security gates, and AST pipeline.
-- `tests/` : Comprehensive test matrices, policy DSL specifications, and security test harnesses.
-- `data/` : Curated NIST/OWASP 3,000-key canonical dataset corpus and dictionaries.
-- `tools/` : Dataset ingestion, canonicalization, and deduplication utilities.
-- `web/` : Interactive compiler inspector, visualization tools, and client-side test runner.
-- `docs/` : Architectural blueprints and pipeline diagrams.
+## Note on Auto-Generated Files
 
----
+The compiler synthesizes two files upon compilation:
+- `generated_validator.cpp`: The standalone C++ validator containing the generated DFA transition table.
+- `generated_bloom_manifest.json`: Configuration manifest detailing Bloom filter bit arrays, hash seeds, and dataset metrics.
 
-## Regenerating Validator and Bloom Manifest
-
-`generated_validator.cpp` and `generated_bloom_manifest.json` are auto-generated compiler artifacts and are intentionally excluded from git tracking.
-
-To regenerate them at any time, run the compiler against any valid policy DSL file:
-```bash
-./policy_compiler.exe tests/policy_dsl2.txt
-```
-This dispatches the codegen agent (Security Gate #2), synthesizing:
-- `generated_validator.cpp`: Contains the minimized DFA state transition table and standalone C++ validator logic.
-- `generated_bloom_manifest.json`: Contains the static RODATA Bloom filter parameters, bit array size, hash seeds, and dataset ingestion metrics.
-
----
-
-## Dataset Generation
-
-The weak password corpus and pattern datasets are maintained under `data/datasets/` and `data/breach_corpus.txt`. To re-curate or update the corpus:
-```bash
-python tools/generate_dataset_curation.py
-```
-This deduplicates and writes exactly 3,000 unique keys into `data/datasets/`, `data/breach_corpus.txt`, and exports `web/dataset_bundle.js`.
+These are generated dynamically from policy inputs and are intentionally excluded from git tracking (`.gitignore`).
