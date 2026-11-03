@@ -81,3 +81,13 @@ To regenerate them at any time, run the compiler against any valid policy DSL fi
 This dispatches the codegen agent (Security Gate #2), synthesizing:
 - `generated_validator.cpp`: Contains the minimized DFA state transition table and standalone C++ validator logic.
 - `generated_bloom_manifest.json`: Contains the static RODATA Bloom filter parameters, bit array size, hash seeds, and dataset ingestion metrics.
+
+---
+
+## Dataset Generation
+
+The weak password corpus and pattern datasets are maintained under `CODE/datasets/` and `CODE/breach_corpus.txt`. To re-curate or update the corpus:
+```bash
+python CODE/tools/generate_dataset_curation.py
+```
+This deduplicates and writes exactly 3,000 unique keys into `CODE/datasets/`, `CODE/breach_corpus.txt`, and exports `CODE/dataset_bundle.js`.

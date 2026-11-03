@@ -81,6 +81,14 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (dictPath == "dictionary.txt") {
+        ifstream df("dictionary.txt");
+        if (!df.is_open()) {
+            ifstream cdf("CODE/dictionary.txt");
+            if (cdf.is_open()) dictPath = "CODE/dictionary.txt";
+        }
+    }
+
     ifstream chk(policyPath);
     if (!chk)
     {

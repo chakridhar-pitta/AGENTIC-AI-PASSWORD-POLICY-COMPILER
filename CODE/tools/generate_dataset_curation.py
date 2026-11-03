@@ -2,10 +2,11 @@ import os
 import json
 import re
 
-# Output paths
-dirs = ["CODE/datasets", "datasets"]
-for d in dirs:
-    os.makedirs(d, exist_ok=True)
+# Output paths - resolve relative to script location (CODE/tools -> CODE)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CODE_DIR = os.path.dirname(SCRIPT_DIR)
+DATASETS_DIR = os.path.join(CODE_DIR, "datasets")
+os.makedirs(DATASETS_DIR, exist_ok=True)
 
 def canonicalize(w):
     return re.sub(r'\s+', '', w.strip().lower())
@@ -643,29 +644,28 @@ assert counts["admin_patterns"] == 300
 assert counts["word_number_patterns"] == 300
 assert counts["other_weak_patterns"] == 300
 
-# Write individual category text files in CODE/datasets and datasets/
-for target_dir in ["CODE/datasets", "datasets"]:
-    for cat_name, entries in all_categories.items():
-        filepath = os.path.join(target_dir, f"{cat_name}.txt")
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(f"# Category: {cat_name}\n")
-            f.write(f"# Standards: NIST SP 800-63B-4 / OWASP ASVS 5.0.0 V6.2.4\n")
-            f.write(f"# Total entries: {len(entries)}\n")
-            for w in sorted(entries):
-                f.write(w + "\n")
-
-# Write consolidated 3,000 entries into breach_corpus.txt
-consolidated = sorted(list(global_seen))
-for path in ["CODE/breach_corpus.txt", "breach_corpus.txt"]:
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("# ==============================================================================\n")
-        f.write("# OWASP ASVS 5.0.0 V6.2.4 & NIST SP 800-63B-4 CONSOLIDATED WEAK PASSWORD CORPUS\n")
-        f.write("# Total Unique Deduplicated Entries: 3,000\n")
-        f.write("# License: Public Domain / CC0-1.0 Universal / Curated Research Wordlist\n")
-        f.write("# Classification: High-Risk Common, Breached, and Predictable Passwords\n")
-        f.write("# ==============================================================================\n")
-        for w in consolidated:
+# Write individual category text files in CODE/datasets
+for cat_name, entries in all_categories.items():
+    filepath = os.path.join(DATASETS_DIR, f"{cat_name}.txt")
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(f"# Category: {cat_name}\n")
+        f.write(f"# Standards: NIST SP 800-63B-4 / OWASP ASVS 5.0.0 V6.2.4\n")
+        f.write(f"# Total entries: {len(entries)}\n")
+        for w in sorted(entries):
             f.write(w + "\n")
+
+# Write consolidated 3,000 entries into CODE/breach_corpus.txt
+consolidated = sorted(list(global_seen))
+breach_path = os.path.join(CODE_DIR, "breach_corpus.txt")
+with open(breach_path, "w", encoding="utf-8") as f:
+    f.write("# ==============================================================================\n")
+    f.write("# OWASP ASVS 5.0.0 V6.2.4 & NIST SP 800-63B-4 CONSOLIDATED WEAK PASSWORD CORPUS\n")
+    f.write("# Total Unique Deduplicated Entries: 3,000\n")
+    f.write("# License: Public Domain / CC0-1.0 Universal / Curated Research Wordlist\n")
+    f.write("# Classification: High-Risk Common, Breached, and Predictable Passwords\n")
+    f.write("# ==============================================================================\n")
+    for w in consolidated:
+        f.write(w + "\n")
 
 # Write dataset_manifest.json
 manifest = {
@@ -692,12 +692,13 @@ manifest = {
     }
 }
 
-for target_dir in ["CODE/datasets", "datasets"]:
-    with open(os.path.join(target_dir, "dataset_manifest.json"), "w", encoding="utf-8") as f:
-        json.dump(manifest, f, indent=2)
+manifest_path = os.path.join(DATASETS_DIR, "dataset_manifest.json")
+with open(manifest_path, "w", encoding="utf-8") as f:
+    json.dump(manifest, f, indent=2)
 
 # Write JS bundle for web application
-with open("CODE/dataset_bundle.js", "w", encoding="utf-8") as f:
+bundle_path = os.path.join(CODE_DIR, "dataset_bundle.js")
+with open(bundle_path, "w", encoding="utf-8") as f:
     f.write("// Curated 3,000 Weak Password Corpus Bundle (OWASP ASVS 5.0.0 V6.2.4)\n")
     f.write("// Exported for Offline Web Application Embedded Evaluation\n")
     f.write("const EMBEDDED_DATASET_MANIFEST = " + json.dumps(manifest, indent=2) + ";\n\n")
