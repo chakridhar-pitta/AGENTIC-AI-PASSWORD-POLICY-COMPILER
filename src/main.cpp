@@ -73,27 +73,41 @@ int main(int argc, char* argv[])
     }
 
     if (breachPath.empty()) {
-        ifstream bf("breach_corpus.txt");
-        if (bf.is_open()) breachPath = "breach_corpus.txt";
+        ifstream dbf("data/breach_corpus.txt");
+        if (dbf.is_open()) breachPath = "data/breach_corpus.txt";
         else {
-            ifstream cbf("CODE/breach_corpus.txt");
-            if (cbf.is_open()) breachPath = "CODE/breach_corpus.txt";
+            ifstream bf("breach_corpus.txt");
+            if (bf.is_open()) breachPath = "breach_corpus.txt";
+            else {
+                ifstream cbf("CODE/breach_corpus.txt");
+                if (cbf.is_open()) breachPath = "CODE/breach_corpus.txt";
+            }
         }
     }
 
     if (dictPath == "dictionary.txt") {
-        ifstream df("dictionary.txt");
-        if (!df.is_open()) {
-            ifstream cdf("CODE/dictionary.txt");
-            if (cdf.is_open()) dictPath = "CODE/dictionary.txt";
+        ifstream ddf("data/dictionary.txt");
+        if (ddf.is_open()) dictPath = "data/dictionary.txt";
+        else {
+            ifstream df("dictionary.txt");
+            if (!df.is_open()) {
+                ifstream cdf("CODE/dictionary.txt");
+                if (cdf.is_open()) dictPath = "CODE/dictionary.txt";
+            }
         }
     }
 
     ifstream chk(policyPath);
     if (!chk)
     {
-        cout << "[ERROR] Cannot open policy file: " << policyPath << "\n";
-        return 1;
+        string fallbackTestPath = "tests/" + policyPath;
+        ifstream chk2(fallbackTestPath);
+        if (chk2) {
+            policyPath = fallbackTestPath;
+        } else {
+            cout << "[ERROR] Cannot open policy file: " << policyPath << "\n";
+            return 1;
+        }
     }
 
     string policySource = readAll(policyPath);

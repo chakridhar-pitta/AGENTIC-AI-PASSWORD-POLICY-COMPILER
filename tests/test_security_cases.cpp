@@ -18,9 +18,13 @@ int main() {
     // Build shared 3,000-entry test filter
     StaticBloomBuilder builder(0.001);
     builder.loadBuiltinCommon();
-    builder.loadDictionaryFile("dictionary.txt");
-    if (!builder.loadBreachCorpusFile("breach_corpus.txt")) {
-        builder.loadBreachCorpusFile("CODE/breach_corpus.txt");
+    if (!builder.loadDictionaryFile("data/dictionary.txt")) {
+        builder.loadDictionaryFile("dictionary.txt");
+    }
+    if (!builder.loadBreachCorpusFile("data/breach_corpus.txt")) {
+        if (!builder.loadBreachCorpusFile("breach_corpus.txt")) {
+            builder.loadBreachCorpusFile("CODE/breach_corpus.txt");
+        }
     }
     builder.loadCuratedDatasets();
     bool built = builder.build();

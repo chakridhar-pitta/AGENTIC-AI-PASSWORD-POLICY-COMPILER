@@ -2,11 +2,14 @@ import os
 import json
 import re
 
-# Output paths - resolve relative to script location (CODE/tools -> CODE)
+# Output paths - resolve relative to script location (tools -> data, web)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else os.getcwd()
-CODE_DIR = os.path.dirname(SCRIPT_DIR)
-DATASETS_DIR = os.path.join(CODE_DIR, "datasets")
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+DATA_DIR = os.path.join(ROOT_DIR, "data")
+DATASETS_DIR = os.path.join(DATA_DIR, "datasets")
+WEB_DIR = os.path.join(ROOT_DIR, "web")
 os.makedirs(DATASETS_DIR, exist_ok=True)
+os.makedirs(WEB_DIR, exist_ok=True)
 
 def canonicalize(w):
     return re.sub(r'\s+', '', w.strip().lower())
@@ -657,9 +660,9 @@ for cat_name, entries in all_categories.items():
         for w in sorted(entries):
             f.write(w + "\n")
 
-# Write consolidated 3,000 entries into CODE/breach_corpus.txt
+# Write consolidated 3,000 entries into data/breach_corpus.txt
 consolidated = sorted(list(global_seen))
-breach_path = os.path.join(CODE_DIR, "breach_corpus.txt")
+breach_path = os.path.join(DATA_DIR, "breach_corpus.txt")
 with open(breach_path, "w", encoding="utf-8") as f:
     f.write("# ==============================================================================\n")
     f.write("# OWASP ASVS 5.0.0 V6.2.4 & NIST SP 800-63B-4 CONSOLIDATED WEAK PASSWORD CORPUS\n")
@@ -700,7 +703,7 @@ with open(manifest_path, "w", encoding="utf-8") as f:
     json.dump(manifest, f, indent=2)
 
 # Write JS bundle for web application
-bundle_path = os.path.join(CODE_DIR, "dataset_bundle.js")
+bundle_path = os.path.join(WEB_DIR, "dataset_bundle.js")
 with open(bundle_path, "w", encoding="utf-8") as f:
     f.write("// Curated 3,000 Weak Password Corpus Bundle (OWASP ASVS 5.0.0 V6.2.4)\n")
     f.write("// Exported for Offline Web Application Embedded Evaluation\n")

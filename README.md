@@ -25,42 +25,16 @@ The system architecture and multi-agent interaction flow are documented in `docs
 
 ## Building the Compiler
 
-Build the compiler and test suite from `CODE/` using `g++` (C++14 or higher):
+Build the compiler and test suite using `g++` (C++14 or higher):
 
 ### Main Compiler (`policy_compiler.exe`)
 ```bash
-g++ -std=c++14 -O2 -I CODE \
-  CODE/agent_attack_detector.cpp \
-  CODE/agent_codegen.cpp \
-  CODE/agent_lexer.cpp \
-  CODE/agent_parser.cpp \
-  CODE/agent_policy_ir.cpp \
-  CODE/agent_security_audit.cpp \
-  CODE/agent_semantic.cpp \
-  CODE/agent_validation.cpp \
-  CODE/agentic_orchestrator.cpp \
-  CODE/automata.cpp \
-  CODE/bloom_filter.cpp \
-  CODE/codegen.cpp \
-  CODE/diagnostics.cpp \
-  CODE/ir.cpp \
-  CODE/ir_analyzer.cpp \
-  CODE/leetspeak.cpp \
-  CODE/lexer.cpp \
-  CODE/main.cpp \
-  CODE/neurosymbolic.cpp \
-  CODE/parser.cpp \
-  CODE/semantic.cpp \
-  -o policy_compiler.exe
+g++ -std=c++14 -O2 -I src src/*.cpp -o policy_compiler.exe
 ```
 
 ### Test Suite (`test_security_cases.exe`)
 ```bash
-g++ -std=c++14 -O2 -I CODE \
-  CODE/test_security_cases.cpp \
-  CODE/bloom_filter.cpp \
-  CODE/leetspeak.cpp \
-  -o test_security_cases.exe
+g++ -std=c++14 -O2 -I src tests/test_security_cases.cpp src/bloom_filter.cpp src/leetspeak.cpp -o test_security_cases.exe
 ```
 
 ---
@@ -69,7 +43,7 @@ g++ -std=c++14 -O2 -I CODE \
 
 ### 1. Compile a Policy File & Evaluate Password
 ```bash
-./policy_compiler.exe CODE/policy_dsl2.txt --password "Test@1234"
+./policy_compiler.exe tests/policy_dsl2.txt --password "Test@1234"
 ```
 
 ### 2. Run Attack Simulation Suite
@@ -84,13 +58,23 @@ g++ -std=c++14 -O2 -I CODE \
 
 ---
 
+## Project Structure
+- `src/` : 7 Agentic AI compiler stages, dual security gates, and AST pipeline.
+- `tests/` : Comprehensive test matrices, policy DSL specifications, and security test harnesses.
+- `data/` : Curated NIST/OWASP 3,000-key canonical dataset corpus and dictionaries.
+- `tools/` : Dataset ingestion, canonicalization, and deduplication utilities.
+- `web/` : Interactive compiler inspector, visualization tools, and client-side test runner.
+- `docs/` : Architectural blueprints and pipeline diagrams.
+
+---
+
 ## Regenerating Validator and Bloom Manifest
 
 `generated_validator.cpp` and `generated_bloom_manifest.json` are auto-generated compiler artifacts and are intentionally excluded from git tracking.
 
 To regenerate them at any time, run the compiler against any valid policy DSL file:
 ```bash
-./policy_compiler.exe CODE/policy_dsl2.txt
+./policy_compiler.exe tests/policy_dsl2.txt
 ```
 This dispatches the codegen agent (Security Gate #2), synthesizing:
 - `generated_validator.cpp`: Contains the minimized DFA state transition table and standalone C++ validator logic.
@@ -100,8 +84,8 @@ This dispatches the codegen agent (Security Gate #2), synthesizing:
 
 ## Dataset Generation
 
-The weak password corpus and pattern datasets are maintained under `CODE/datasets/` and `CODE/breach_corpus.txt`. To re-curate or update the corpus:
+The weak password corpus and pattern datasets are maintained under `data/datasets/` and `data/breach_corpus.txt`. To re-curate or update the corpus:
 ```bash
-python CODE/tools/generate_dataset_curation.py
+python tools/generate_dataset_curation.py
 ```
-This deduplicates and writes exactly 3,000 unique keys into `CODE/datasets/`, `CODE/breach_corpus.txt`, and exports `CODE/dataset_bundle.js`.
+This deduplicates and writes exactly 3,000 unique keys into `data/datasets/`, `data/breach_corpus.txt`, and exports `web/dataset_bundle.js`.

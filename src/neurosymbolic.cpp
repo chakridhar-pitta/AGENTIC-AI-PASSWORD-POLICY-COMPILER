@@ -137,8 +137,10 @@ ProfessionalSecurityReport NeuroSymbolicEvaluator::analyzeSecurity(
     if (!breachCorpusPath.empty()) {
         builder.loadBreachCorpusFile(breachCorpusPath);
     } else {
-        if (!builder.loadBreachCorpusFile("breach_corpus.txt")) {
-            builder.loadBreachCorpusFile("CODE/breach_corpus.txt");
+        if (!builder.loadBreachCorpusFile("data/breach_corpus.txt")) {
+            if (!builder.loadBreachCorpusFile("breach_corpus.txt")) {
+                builder.loadBreachCorpusFile("CODE/breach_corpus.txt");
+            }
         }
     }
     builder.loadCuratedDatasets();

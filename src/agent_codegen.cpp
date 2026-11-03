@@ -24,8 +24,10 @@ bool CodegenAgent::runBreachFilterSynthesizer() {
     if (!breachPath.empty()) {
         bloomBuilder.loadBreachCorpusFile(breachPath);
     } else {
-        if (!bloomBuilder.loadBreachCorpusFile("breach_corpus.txt")) {
-            bloomBuilder.loadBreachCorpusFile("CODE/breach_corpus.txt");
+        if (!bloomBuilder.loadBreachCorpusFile("data/breach_corpus.txt")) {
+            if (!bloomBuilder.loadBreachCorpusFile("breach_corpus.txt")) {
+                bloomBuilder.loadBreachCorpusFile("CODE/breach_corpus.txt");
+            }
         }
     }
     bloomBuilder.loadCuratedDatasets();

@@ -268,8 +268,11 @@ bool StaticBloomBuilder::loadCuratedDatasets(const std::string& baseDir) {
 
     std::vector<std::string> searchDirs;
     if (!baseDir.empty()) searchDirs.push_back(baseDir);
+    searchDirs.push_back("data/datasets");
+    searchDirs.push_back("data");
     searchDirs.push_back("datasets");
     searchDirs.push_back("CODE/datasets");
+    searchDirs.push_back("../data/datasets");
     searchDirs.push_back("../datasets");
 
     std::string foundDir = "";
