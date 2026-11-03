@@ -1,11 +1,25 @@
 # Agentic AI Password Policy Compiler (Enterprise v3.0)
 
+<p align="center">
+  <img src="docs/images/nitw_crest_official.png" alt="NIT Warangal Crest" width="160" />
+</p>
+
 A university compiler-design project featuring an 8-stage Agentic AI compiler pipeline, attack simulation suite, and intelligent password policy enforcement engine.
 
 ## Core Pillars
 - **Agentic AI**: 7 specialized autonomous compiler agents + orchestrator + dual security gates + O-A-D-A-V telemetry audit trails.
 - **Attack Simulation**: Automated attack detection suite testing 28 real-world vectors (prompt injection, policy bypass, downgrade attacks, DSL/C++ code injection, DoS) with quantitative confusion matrix evaluation.
 - **Intelligent AI**: Neuro-symbolic multi-factor policy verification, Leetspeak variant detection, and static RODATA Bloom filtering.
+
+---
+
+## Architectural Design & Pipeline
+
+The system architecture and multi-agent interaction flow are documented in `docs/images/`:
+- **Overall System Architecture**: [`docs/images/Architecture Diagram.png`](docs/images/Architecture%20Diagram.png)
+- **Agentic Pipeline**: [`docs/images/Architectural Pipeline.png`](docs/images/Architectural%20Pipeline.png)
+- **Module Interaction Flow**: [`docs/images/Module Interaction Flow.png`](docs/images/Module%20Interaction%20Flow.png)
+- **Evolutionary Architecture Comparison**: [`docs/images/Existing_and_Proposed_Architecture.png`](docs/images/Existing_and_Proposed_Architecture.png)
 
 ---
 
