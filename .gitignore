@@ -22,6 +22,7 @@ obj/
 .idea/
 *.swp
 *.patch
+*.bak
 
 # Python cache
 __pycache__/
