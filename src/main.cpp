@@ -58,8 +58,8 @@ static string escapeJson(const string &s) {
     } else if (c == '\t') {
       o << "\\t";
     } else if ((unsigned char)c < 32) {
-      o << "\\u" << hex << setw(4) << setfill('0')
-        << (int)(unsigned char)c << dec;
+      o << "\\u" << hex << setw(4) << setfill('0') << (int)(unsigned char)c
+        << dec;
     } else {
       o << c;
     }
