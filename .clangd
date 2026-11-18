@@ -13,3 +13,8 @@ CompileFlags:
     - C:/MinGW/include
     - -isystem
     - C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed
+
+Diagnostics:
+  UnusedIncludes: None
+  Suppress:
+    - unused-includes

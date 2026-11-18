@@ -1,12 +1,9 @@
-#include <algorithm>
 #include <cctype>
 #include <cstdio>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <memory>
 #include <sstream>
-#include <string>
 #include <vector>
 
 #ifdef _WIN32
@@ -22,13 +19,10 @@
 #include "agent_lexer.h"
 #include "agent_parser.h"
 #include "agent_policy_ir.h"
-#include "agent_security_audit.h"
 #include "agent_semantic.h"
-#include "agent_types.h"
 #include "agent_validation.h"
 #include "agentic_orchestrator.h"
 #include "ast.h"
-#include "diagnostics.h"
 #include "token.h"
 
 using namespace std;
