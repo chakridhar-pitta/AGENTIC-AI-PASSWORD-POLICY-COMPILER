@@ -22,6 +22,12 @@ A university compiler-design project implementing a domain-specific language (DS
    - **Neuro-Symbolic Evaluator**: Combines deterministic constraint evaluation with statistical Shannon entropy calculations and multi-factor strength scoring.
    - **Leetspeak Analysis**: Normalizes ASCII character substitution patterns (e.g., `@` $\rightarrow$ `a`, `$` $\rightarrow$ `s`, `0` $\rightarrow$ `o`) against blocklist datasets.
    - **Static Bloom Filter**: Uses double hashing (FNV-1a and MurmurMix) to screen against a curated 3,000-key canonical weak password dataset with exact binary search verification.
+4. **Resilient Zero-Trust Orchestration**:
+   - **Isolated Worker Engine**: Monolithic compiler decomposed into isolated role-based worker processes.
+   - **Durable Ledger & Cryptographic Chain**: Append-only SQLite WAL ledger with a continuous SHA-256 event hash chain.
+   - **Multi-Gate Intake Consensus**: $\ge 2$ of 3 consensus (Gate-A attack detector, Gate-B default-deny allowlist, Gate-P grammar parser) prevents adversarial ingestion.
+   - **Standby Worker Takeover**: Atomic lease timeouts and broker watchdog recover and reassign tasks automatically on crash.
+   - **Release Provenance Verification**: Independent cryptographic verification of artifact hash chains and dual-gate signed approvals.
 
 ---
 
@@ -56,7 +62,7 @@ flowchart LR
 
 ```text
 ├── src/                  # C++ compiler implementation and headers
-│   ├── main.cpp          # CLI entry point and interactive evaluation loop
+│   ├── main.cpp          # CLI entry point, stage-mode dispatch, and evaluation loop
 │   ├── agentic_orchestrator.* # Agent coordinator and telemetry manager
 │   ├── agent_*.cpp/.h    # Specialized compiler stage agents
 │   ├── automata.*        # Regular expression to NFA/DFA/minimized DFA engine
@@ -64,10 +70,20 @@ flowchart LR
 │   ├── leetspeak.*       # ASCII substitution normalizer
 │   ├── neurosymbolic.*   # Multi-factor evaluator and entropy calculator
 │   └── ...               # AST, IR, lexer, parser, semantic analyzer, codegen
-├── tests/                # Policy DSL test cases and standalone test harness
+├── resilient/            # Zero-trust distributed job orchestration pipeline
+│   ├── broker.py         # Deterministic broker with atomic leases and watchdog
+│   ├── coordinator.py    # Multi-gate intake consensus and job dispatch
+│   ├── envelope.py       # HMAC-SHA256 task/result envelope signing & verification
+│   ├── gates.py          # Gate-A, Gate-B, Gate-P consensus engine
+│   ├── ledger.py         # SQLite WAL durable ledger & tamper-evident event chain
+│   ├── releaser.py       # Cryptographic provenance release & independent verifier
+│   ├── worker.py         # Isolated role-based stage worker execution engine
+│   └── cli.py            # CLI command implementations
+├── tests/                # Policy DSL test cases, security harness, and unit tests
 │   ├── policy_dsl2.txt   # Multi-constraint sample policy
 │   ├── test_*.txt        # Threat vectors, edge cases, and industry baselines
-│   └── test_security_cases.cpp # Bloom filter and leetspeak verification tests
+│   ├── test_security_cases.cpp # Bloom filter and leetspeak verification tests
+│   └── test_resilient.py # Unit tests for resilient ledger, envelopes, and crypto
 ├── data/                 # Wordlists and weak password patterns
 │   ├── datasets/         # 7 category pattern files (3,000 unique keys)
 │   ├── breach_corpus.txt # Consolidated deduplicated weak passwords
@@ -77,7 +93,14 @@ flowchart LR
 ├── web/                  # Offline visualizer and testing tools
 │   ├── Enhanced_Compiler.html      # Interactive visual compiler UI
 │   ├── test_suite_standalone.html  # Standalone client-side test suite
-│   └── dataset_bundle.js           # Embedded dataset bundle for web testing
+│   ├── dataset_bundle.js           # Embedded dataset bundle for web testing
+│   ├── verify_all_requirements.py  # Structural & syntactic verification script
+│   └── generate_verification.py    # Verification report generator
+├── cli.py / cli.bat      # Unified CLI entry point for resilient pipeline
+├── demo_faults.py        # Automated 5-scenario fault-injection benchmark
+├── build_and_run.bat     # One-click build and execution script
+├── generate_100_tests.py # 100-scenario QA verification generator
+├── test_cases_100.json   # 100-case verification oracle dataset
 └── docs/                 # Documentation assets and architectural diagrams
     └── images/           # Pipeline flowcharts and architecture diagrams
 ```
@@ -91,6 +114,11 @@ The compiler requires a standard C++14 (or newer) toolchain (e.g., `g++` / MinGW
 ### 1. Build Main Compiler (`policy_compiler.exe`)
 ```bash
 g++ -std=c++14 -O2 -I src src/*.cpp -o policy_compiler.exe
+```
+
+Or run the convenient batch script on Windows:
+```cmd
+build_and_run.bat
 ```
 
 ### 2. Build Security Test Suite (`test_security_cases.exe`)
@@ -130,6 +158,39 @@ Outputs the full O-A-D-A-V telemetry trail showing each agent's observations and
 Executes the integration test suite for the Bloom filter and leetspeak analyzer:
 ```bash
 ./test_security_cases.exe
+```
+
+### 6. Run Resilient Zero-Trust Orchestration CLI
+```bash
+# Initialize cryptographic role keys and SQLite WAL ledger
+python cli.py init
+
+# Submit policy through intake consensus gates (Gate-A, Gate-B, Gate-P)
+python cli.py submit tests/policy_dsl2.txt
+
+# Inspect job & stage progression
+python cli.py status <job_id>
+
+# Verify cryptographic provenance and SHA-256 hash chains of release package
+python cli.py verify release/<job_id>
+```
+
+### 7. Run Fault-Injection Benchmark Suite
+Executes all 5 automated fault-injection scenarios (Agent 0 kill, forged approval/gate breach, worker kill & standby takeover, artifact tampering, broker crash & state recovery):
+```bash
+python demo_faults.py
+```
+
+### 8. Run Resilient Pipeline Unit Tests
+Executes unit tests for SQLite WAL ledger, cryptographic hash chain, envelopes, and default-deny gate checks:
+```bash
+python -m unittest tests/test_resilient.py
+```
+
+### 9. Run Web Verification & Structural QA Suite
+Executes verification for UI requirements, DFA state diagrams, and compiler features:
+```bash
+python web/verify_all_requirements.py
 ```
 
 ---

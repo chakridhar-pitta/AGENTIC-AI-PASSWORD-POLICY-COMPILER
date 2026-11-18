@@ -20,6 +20,8 @@ bin/
 obj/
 .vscode/
 .idea/
+.cache/
+compile_commands.json
 *.swp
 *.patch
 *.bak
@@ -27,3 +29,15 @@ obj/
 # Python cache
 __pycache__/
 *.py[cod]
+
+# Resilient pipeline keys and runtime data
+keys/
+**/keys/
+release/
+**/release/
+*.db
+*.db-wal
+*.db-shm
+resilient_workspace/
+demo_workspace/
+
