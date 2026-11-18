@@ -43,22 +43,22 @@ static string readAll(const string &path) {
 static string escapeJson(const string &s) {
   ostringstream o;
   for (char c : s) {
-    if (c == '"') {
-      o << '\\' << '"';
+    if (c == '\"') {
+      o << "\\\"";
     } else if (c == '\\') {
-      o << '\\' << '\\';
+      o << "\\\\";
     } else if (c == '\b') {
-      o << '\\' << 'b';
+      o << "\\b";
     } else if (c == '\f') {
-      o << '\\' << 'f';
+      o << "\\f";
     } else if (c == '\n') {
-      o << '\\' << 'n';
+      o << "\\n";
     } else if (c == '\r') {
-      o << '\\' << 'r';
+      o << "\\r";
     } else if (c == '\t') {
-      o << '\\' << 't';
+      o << "\\t";
     } else if ((unsigned char)c < 32) {
-      o << '\\' << 'u' << hex << setw(4) << setfill('0')
+      o << "\\u" << hex << setw(4) << setfill('0')
         << (int)(unsigned char)c << dec;
     } else {
       o << c;
